@@ -85,10 +85,10 @@ export default function Navbar() {
                             {!user ? (
                                 <>
                                     <Link
-                                        href="/login"
+                                        href="/auth/signup"
                                         className="text-sm font-medium text-primary hover:opacity-80"
                                     >
-                                        Sign In
+                                        Sign Up
                                     </Link>
 
                                     <Button
