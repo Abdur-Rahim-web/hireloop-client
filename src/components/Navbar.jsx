@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@heroui/react";
 import { Bars, Xmark } from "@gravity-ui/icons";
 import { Icon } from "@gravity-ui/uikit";
+import { signOut, useSession } from "@/lib/auth-client";
 
 const navItems = [
     { label: "Browse Jobs", href: "/jobs" },
@@ -19,8 +20,14 @@ export default function Navbar() {
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // 🔐 mock auth (replace later with real auth)
-    const user = null;
+    const { data: session, isPending, } = useSession();
+    console.log(isPending, session)
+
+    const user = session?.user;
+
+    const handleSignOut = async () => {
+        await signOut();
+    }
 
     const dashboardRoute = {
         seeker: "/dashboard/seeker",
@@ -65,8 +72,8 @@ export default function Navbar() {
                                         <Link
                                             href={item.href}
                                             className={`text-sm font-medium transition ${isActive
-                                                    ? "text-primary"
-                                                    : "text-default-600 hover:text-foreground"
+                                                ? "text-primary"
+                                                : "text-default-600 hover:text-foreground"
                                                 }`}
                                         >
                                             {item.label}
@@ -92,29 +99,23 @@ export default function Navbar() {
                                     </Link>
 
                                     <Button
-                                        as={Link}
-                                        href="/register"
                                         color="primary"
                                         radius="full"
                                     >
-                                        Get Started
+                                        <Link href="/auth/signin">
+                                            Get Started
+                                        </Link>
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button
-                                        as={Link}
-                                        href={dashboardRoute[user.role]}
-                                        color="primary"
-                                        variant="flat"
-                                        radius="full"
-                                    >
-                                        Dashboard
-                                    </Button>
-
+                                    Hi, {user.name}
                                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
                                         {user.name?.charAt(0)}
                                     </div>
+
+                                    <Button onClick={handleSignOut} variant="ghost">Sign Out</Button>
+
                                 </>
                             )}
                         </div>
@@ -160,17 +161,18 @@ export default function Navbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="mb-3 block rounded-xl px-4 py-3 text-sm font-medium text-primary"
                                         >
-                                            Sign In
+                                            Sign Up
                                         </Link>
 
                                         <Button
                                             as={Link}
-                                            href="/register"
                                             color="primary"
                                             fullWidth
                                             radius="full"
                                         >
-                                            Get Started
+                                            <Link href="/auth/signin">
+                                                Get Started
+                                            </Link>
                                         </Button>
                                     </>
                                 ) : (

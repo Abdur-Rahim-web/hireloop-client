@@ -7,18 +7,7 @@ import { Card, Button, Link, TextField, Label, InputGroup, Input, FieldError } f
 import { Eye, EyeSlash, Person, At, ShieldKeyhole } from "@gravity-ui/icons";
 import { signUp } from "@/lib/auth-client";
 
-// Mock authClient for application logic demonstration
-const authClient = {
-    signUp: {
-        email: async ({ email, password, name }) => {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            if (email.includes("taken")) {
-                return { error: { message: "This email is already in use." } };
-            }
-            return { data: { success: true }, error: null };
-        }
-    }
-};
+
 
 export default function SignupPage() {
     // Form fields
@@ -45,6 +34,7 @@ export default function SignupPage() {
                 email,
                 password,
                 name,
+                callbackURL:"/auth/signin"
             });
 
             if (authError) {
@@ -154,7 +144,7 @@ export default function SignupPage() {
                     {/* Navigation Option */}
                     <div className="text-center pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                         Already have an account?{" "}
-                        <Link href="/signin" className="font-medium cursor-pointer text-sm text-blue-600 dark:text-blue-400">
+                        <Link href="/auth/signin" className="font-medium cursor-pointer text-sm text-blue-600 dark:text-blue-400">
                             Sign in instead
                         </Link>
                     </div>
